@@ -51,6 +51,7 @@ export default {
     async submit() {
       try {
         const res = await axios.post(`http://localhost:3000/users`, {name: this.name, lastname: this.lastname, phone: this.phone});
+        this.$router.push("/users")
       } catch (error) {
         console.log(error);
         return { error: error };
