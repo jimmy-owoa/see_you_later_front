@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th class="text-left">Name</th>
-            <th class="text-left">Phone</th>
+            <th class="text-left">Date</th>
             <th class="text-left">Actions</th>
           </tr>
         </thead>
@@ -14,12 +14,14 @@
             <td>{{ event.title }}</td>
             <td>{{ event.date }}</td>
             <td>
+              <v-btn color="teal" :to="`/events/` + event.id">Ver</v-btn>
               <v-btn color="red" @click="deleteEvent(event.id)">Eliminar</v-btn>
             </td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
+    <v-btn color="green" to="events/new">Nuevo</v-btn>
   </div>
 </template>
 

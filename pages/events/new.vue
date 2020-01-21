@@ -1,18 +1,22 @@
 <template>
-  <v-card dark>
+  <v-card>
     <v-form>
       <v-container>
-        date: {{ date }} time: {{ time }}
-        formatted: {{ new Date(date + " " + time)}}
+        <!-- date: {{ date }} time: {{ time }}
+        formatted: {{ new Date(date + " " + time)}} -->
+        dates: {{ dates }}
         <v-row>
           <v-col cols="12" md="4">
-            <v-text-field v-model="title" :rules="titleRules" :counter="20" label="Title" required></v-text-field>
+            <v-text-field v-model="title" :rules="titleRules" :counter="30" label="Title" required></v-text-field>
           </v-col>
           <v-col>
-            <v-time-picker v-model="time" light></v-time-picker>
+            <v-date-picker v-model="date" multiple light></v-date-picker>
           </v-col>
-          <v-col>
-            <v-date-picker v-model="date" light></v-date-picker>
+          <v-col v-if="date.length">
+            <div v-for="(time,i) in date.length" :key="i">
+              {{date[i]}}
+              <v-time-picker @change="addTime(date[i], $event)" light></v-time-picker>
+            </div>
           </v-col>
           <v-col cols="12">
             <v-autocomplete
@@ -56,7 +60,7 @@
               </template>
             </v-autocomplete>
           </v-col>
-          {{ participants }}
+          <!-- {{ participants }} -->
           <v-flex md12>
             <v-btn class="mr-4" @click="submit">submit</v-btn>
           </v-flex>
@@ -76,10 +80,12 @@ export default {
     users: [],
     title: "The summer breeze",
     time: "",
-    date: "",
+    date: [],
+    dates: [],
     titleRules: [
       v => !!v || "Title is required",
-      v => v.length <= 5 || "Title must be less than 5 characters"
+      v => v.length >= 5 || "Title must be more than 5 characters",
+      v => v.length <= 30 || "Title must be less than 30 characters"
     ],
     dateRules: [v => !!v || "Date is required"]
   }),
@@ -88,7 +94,7 @@ export default {
       try {
         const res = await axios.post(`http://localhost:3000/events`, {
           title: this.title,
-          date: new Date(this.date + " " + this.time),
+          dates: this.dates,
           invitations: this.participants
         });
         this.$router.push("/events");
@@ -100,6 +106,20 @@ export default {
     remove(item) {
       const index = this.participants.indexOf(item.name);
       if (index >= 0) this.participants.splice(index, 1);
+    },
+    addTime(new_date, e){
+      new_date = new Date(new_date + " " + e)
+      let answer = this.dates.find(a => a.substring(0,10) == new_date.toString().substring(0,10));
+      if (answer) {
+        // answer = new_date
+        let index = this.dates.indexOf(answer);
+        this.dates.splice(index, 1);
+        this.dates.push(new_date.toString());
+      } else {
+        console.log(new_date.toString())
+        this.dates.push(new_date.toString());
+      }
+      
     }
   },
   async beforeMount() {
