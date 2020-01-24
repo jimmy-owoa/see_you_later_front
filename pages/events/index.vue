@@ -43,8 +43,9 @@ export default {
     redirect,
     error
   }) {
+    axios.defaults.baseURL = isDev ? store.state.env.DEV : store.state.env.PROD
     try {
-      const res = await axios.get(`https://see-you-later.herokuapp.com/events`);
+      const res = await axios.get(`/events`);
       const events = res.data;
       return { events };
     } catch (error) {
@@ -55,7 +56,7 @@ export default {
   methods: {
     async deleteEvent(id) {
       try {
-        const res = await axios.delete(`https://see-you-later.herokuapp.com/events/${id}`);
+        const res = await axios.delete(`/events/${id}`);
         if (res.status == "200") this.$router.go();
       } catch (error) {
         console.log(error);

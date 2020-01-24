@@ -28,8 +28,9 @@ import axios from "axios";
 import { async } from "q";
 export default {
   async asyncData({isDev, route, store, env, params, query, req, res, redirect, error}){
+    axios.defaults.baseURL = isDev ? store.state.env.DEV : store.state.env.PROD
     try {
-      const res = await axios.get(`https://see-you-later.herokuapp.com/users`);
+      const res = await axios.get(`/users`);
       const users = res.data;
       return { users };
     } catch (error) {
@@ -37,10 +38,13 @@ export default {
       return { error: error };
     }
   },
+  mounted(){
+    console.log(process.env.NODE_ENV)
+  },
   methods: {
     async deleteUser(phone) {
       try {
-        const res = await axios.delete(`https://see-you-later.herokuapp.com/users/${phone}`);
+        const res = await axios.delete(`/users/${phone}`);
         if (res.status == "200")
           this.$router.go()
       } catch (error) {

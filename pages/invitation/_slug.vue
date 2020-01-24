@@ -1,10 +1,11 @@
 <template>
   <div>
     <v-flex text-md-center>
-      <h1>{{ data.title }}</h1> 
+      <h1>{{ data.title }}</h1>
       <v-alert type="info">
-      Para confirmar tu asistencia, haz click sobre el <v-icon>mdi-check-bold</v-icon>
-    </v-alert>
+        Para confirmar tu asistencia, haz click sobre el
+        <v-icon>mdi-check-bold</v-icon>
+      </v-alert>
     </v-flex>
     <v-simple-table>
       <template v-slot:default>
@@ -18,7 +19,11 @@
           <tr v-for="item in data.data" :key="item.id">
             <td>{{item.name + " " + item.lastname}}</td>
             <td v-for="(invitation,idx) in item.invitations" :key="idx">
-              <v-icon large :color="invitation.accepted ? 'green' : ''" @click="changeResponse(invitation.id)">mdi-check-bold</v-icon>
+              <v-icon
+                large
+                :color="invitation.accepted ? 'green' : ''"
+                @click="changeResponse(invitation.id)"
+              >mdi-check-bold</v-icon>
             </td>
           </tr>
         </tbody>
@@ -30,9 +35,9 @@
 <script>
 import axios from "axios";
 import { async } from "q";
-import AcceptedUsers from "@/components/AcceptedUsers"
+import AcceptedUsers from "@/components/AcceptedUsers";
 export default {
-  components:{
+  components: {
     AcceptedUsers
   },
   data() {
@@ -65,8 +70,9 @@ export default {
     redirect,
     error
   }) {
+    axios.defaults.baseURL = isDev ? store.state.env.DEV : store.state.env.PROD;
     try {
-      const res = await axios.get(`https://see-you-later.herokuapp.com/events/${params.slug}`);
+      const res = await axios.get(`/events/${params.slug}`);
       const data = res.data;
       return { data };
     } catch (error) {
@@ -74,29 +80,19 @@ export default {
       return { error: error };
     }
   },
-  created() {
-    // let a = []
-    // let b = []
-    // this.data.invitations.forEach(element => {
-    //   a.push(element.beauty_date)
-    //   this.dateIds.push({id: element.id, accepted: element.accepted})
-    //   this.headers.push({ text: element.beauty_date, value: element.id });
-    // });
-    // this.beautyDates = [...new Set(a)]
-  },
   methods: {
     getColor(status) {
       if (status == "Rechazado") return "red";
       else return "green";
     },
-    getInvitations(){
+    getInvitations() {
       return [...new Set(this.data.invitations.map(item => item.user_id))];
     },
     changeResponse(item) {
       // console.log(item)
       try {
         axios
-          .put(`https://see-you-later.herokuapp.com/invitations/${item}/change_response/`)
+          .put(`/invitations/${item}/change_response/`)
           .then(res => {
             this.getMessage(res.status);
           })
@@ -117,7 +113,7 @@ export default {
     },
     async refresh() {
       const { data: refresh } = await axios.get(
-        `https://see-you-later.herokuapp.com/events/${this.$route.params.slug}`
+        `/events/${this.$route.params.slug}`
       );
       this.data = refresh;
     }
