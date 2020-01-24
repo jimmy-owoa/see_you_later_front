@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-simple-table dark>
+  <v-card>
+    <v-simple-table>
       <template v-slot:default>
         <thead>
           <tr>
@@ -14,13 +14,13 @@
             <td>{{ user.name }}</td>
             <td>{{ user.phone }}</td>
             <td>
-              <v-btn color="red" @click="deleteUser(user.phone)">Eliminar</v-btn>
+              <v-btn color="#ca4435" dark @click="deleteUser(user.phone)">Eliminar</v-btn>
             </td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ import { async } from "q";
 export default {
   async asyncData({isDev, route, store, env, params, query, req, res, redirect, error}){
     try {
-      const res = await axios.get(`http://localhost:3000/users`);
+      const res = await axios.get(`http://192.168.0.56:3000/users`);
       const users = res.data;
       return { users };
     } catch (error) {
@@ -40,7 +40,7 @@ export default {
   methods: {
     async deleteUser(phone) {
       try {
-        const res = await axios.delete(`http://localhost:3000/users/${phone}`);
+        const res = await axios.delete(`http://192.168.0.56:3000/users/${phone}`);
         if (res.status == "200")
           this.$router.go()
       } catch (error) {

@@ -1,27 +1,29 @@
 <template>
   <div>
-    <v-simple-table dark>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">Name</th>
-            <th class="text-left">Date</th>
-            <th class="text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="event in events" :key="event.id">
-            <td>{{ event.title }}</td>
-            <td>{{ event.date }}</td>
-            <td>
-              <v-btn color="teal" :to="`/events/` + event.id">Ver</v-btn>
-              <v-btn color="red" @click="deleteEvent(event.id)">Eliminar</v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
-    <v-btn color="green" to="events/new">Nuevo</v-btn>
+    <v-card>
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Nombre del evento</th>
+              <th class="text-left">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="event in events" :key="event.id">
+              <td>{{ event.title }}</td>
+              <td>
+                <v-btn color="#35ca8f" dark :to="`/invitation/` + event.slug">Ver</v-btn>
+                <v-btn color="#ca4435" dark @click="deleteEvent(event.slug)">Eliminar</v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-card>
+    <v-flex sm12 pt-3>
+      <v-btn color="#35ca8f" dark to="events/new">Nuevo</v-btn>
+    </v-flex>
   </div>
 </template>
 
@@ -29,9 +31,20 @@
 import axios from "axios";
 import { async } from "q";
 export default {
-  async asyncData({isDev, route, store, env, params, query, req, res, redirect, error}){
+  async asyncData({
+    isDev,
+    route,
+    store,
+    env,
+    params,
+    query,
+    req,
+    res,
+    redirect,
+    error
+  }) {
     try {
-      const res = await axios.get(`http://localhost:3000/events`);
+      const res = await axios.get(`http://192.168.0.56:3000/events`);
       const events = res.data;
       return { events };
     } catch (error) {
@@ -42,9 +55,8 @@ export default {
   methods: {
     async deleteEvent(id) {
       try {
-        const res = await axios.delete(`http://localhost:3000/events/${id}`);
-        if (res.status == "200")
-          this.$router.go()
+        const res = await axios.delete(`http://192.168.0.56:3000/events/${id}`);
+        if (res.status == "200") this.$router.go();
       } catch (error) {
         console.log(error);
         return { error: error };
