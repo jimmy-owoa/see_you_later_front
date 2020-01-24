@@ -49,9 +49,8 @@ export default {
   }),
   methods: {
     async submit() {
-      axios.defaults.baseURL = (process.env.NODE_ENV == "development") ? this.$store.state.env.DEV : this.$store.state.env.PROD
       try {
-        const res = await axios.post(`/users`, {name: this.name, lastname: this.lastname, phone: this.phone});
+        const res = await axios.post(`https://see-you-later.herokuapp.com/users`, {name: this.name, lastname: this.lastname, phone: this.phone});
         this.$router.push("/users")
       } catch (error) {
         console.log(error);

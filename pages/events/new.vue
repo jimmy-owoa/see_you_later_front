@@ -115,9 +115,8 @@ export default {
   }),
   methods: {
     async submit() {
-      axios.defaults.baseURL = (process.env.NODE_ENV == "development") ? this.$store.state.env.DEV : this.$store.state.env.PROD
       try {
-        const res = await axios.post(`/events`, {
+        const res = await axios.post(`https://see-you-later.herokuapp.com/events`, {
           title: this.title,
           dates: this.dates,
           invitations: this.participants
@@ -150,7 +149,8 @@ export default {
   },
   async beforeMount() {
     try {
-      const res = await axios.get(`/users`);
+      const res = await axios.get(`https://see-you-later.herokuapp.com/users`);
+      console.log(res.data);
       this.users = res.data;
     } catch (error) {
       console.log(error);
