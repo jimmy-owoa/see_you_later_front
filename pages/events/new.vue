@@ -116,7 +116,7 @@ export default {
   methods: {
     async submit() {
       try {
-        const res = await axios.post(`http://192.168.0.56:3000/events`, {
+        const res = await axios.post(`https://see-you-later.herokuapp.com/events`, {
           title: this.title,
           dates: this.dates,
           invitations: this.participants
@@ -149,7 +149,7 @@ export default {
   },
   async beforeMount() {
     try {
-      const res = await axios.get(`http://192.168.0.56:3000/users`);
+      const res = await axios.get(`https://see-you-later.herokuapp.com/users`);
       console.log(res.data);
       this.users = res.data;
     } catch (error) {

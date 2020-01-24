@@ -66,7 +66,7 @@ export default {
     error
   }) {
     try {
-      const res = await axios.get(`http://192.168.0.56:3000/events/${params.slug}`);
+      const res = await axios.get(`https://see-you-later.herokuapp.com/events/${params.slug}`);
       const data = res.data;
       return { data };
     } catch (error) {
@@ -96,7 +96,7 @@ export default {
       // console.log(item)
       try {
         axios
-          .put(`http://192.168.0.56:3000/invitations/${item}/change_response/`)
+          .put(`https://see-you-later.herokuapp.com/invitations/${item}/change_response/`)
           .then(res => {
             this.getMessage(res.status);
           })
@@ -117,7 +117,7 @@ export default {
     },
     async refresh() {
       const { data: refresh } = await axios.get(
-        `http://192.168.0.56:3000/events/${this.$route.params.slug}`
+        `https://see-you-later.herokuapp.com/events/${this.$route.params.slug}`
       );
       this.data = refresh;
     }

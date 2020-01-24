@@ -44,7 +44,7 @@ export default {
     error
   }) {
     try {
-      const res = await axios.get(`http://192.168.0.56:3000/events`);
+      const res = await axios.get(`https://see-you-later.herokuapp.com/events`);
       const events = res.data;
       return { events };
     } catch (error) {
@@ -55,7 +55,7 @@ export default {
   methods: {
     async deleteEvent(id) {
       try {
-        const res = await axios.delete(`http://192.168.0.56:3000/events/${id}`);
+        const res = await axios.delete(`https://see-you-later.herokuapp.com/events/${id}`);
         if (res.status == "200") this.$router.go();
       } catch (error) {
         console.log(error);

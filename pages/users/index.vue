@@ -29,7 +29,7 @@ import { async } from "q";
 export default {
   async asyncData({isDev, route, store, env, params, query, req, res, redirect, error}){
     try {
-      const res = await axios.get(`http://192.168.0.56:3000/users`);
+      const res = await axios.get(`https://see-you-later.herokuapp.com/users`);
       const users = res.data;
       return { users };
     } catch (error) {
@@ -40,7 +40,7 @@ export default {
   methods: {
     async deleteUser(phone) {
       try {
-        const res = await axios.delete(`http://192.168.0.56:3000/users/${phone}`);
+        const res = await axios.delete(`https://see-you-later.herokuapp.com/users/${phone}`);
         if (res.status == "200")
           this.$router.go()
       } catch (error) {
